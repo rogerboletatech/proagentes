@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ProAgentes | Quando criar um agente de IA</title>
 <meta name="description" content="Guia prático para PMs e engenheiros: níveis de agentes de IA, workflow x autônomo, e onde a validação precisa ser determinística. Com o caso do kit de documentação.">
+<meta name="theme-color" content="#15171a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Nem todo problema pede um agente de IA">
+<meta property="og:description" content="Guia para PMs e engenheiros: níveis de agentes, workflow x autônomo e onde a validação precisa ser determinística. Com simulação de um kit de documentos.">
+<meta property="og:image" content="/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2315171a'/><path d='M10 16h12' stroke='%23ece9e0' stroke-width='2'/><circle cx='9' cy='16' r='4' fill='%235fd3a8'/><circle cx='23' cy='16' r='4' fill='%23a79df5'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -188,33 +195,138 @@ section.demo > .wrap > .mono{color:#a79df5}
 .verdict.hu{border-color:var(--h);background:rgba(242,138,166,.1)}
 .simfoot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;color:#6b717a;font-size:.8rem}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* v3: navegacao, foco, quiz, glossario */
+:root{--d:#5fd3a8;--l:#f5b267;--a:#a79df5;--h:#f28aa6}
+:focus-visible{outline:3px solid var(--ag);outline-offset:2px}
+.demo :focus-visible,.mini:focus-visible{outline-color:#fff}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+section,.hero{scroll-margin-top:104px}
+.prog{height:3px;background:var(--ag);width:0}
+.tgl{display:flex;align-items:center}
+.tlabel{font-size:.78rem;color:var(--muted);margin-right:8px;display:none}
+@media(min-width:760px){.tlabel{display:inline}}
+header .snav{justify-content:flex-start;gap:6px;overflow-x:auto;padding-top:0;padding-bottom:8px;scrollbar-width:none}
+.snav::-webkit-scrollbar{display:none}
+.snav a{flex:none;font-size:.8rem;font-weight:500;text-decoration:none;padding:5px 12px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.snav a.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tag::before{font-size:.55rem;margin-right:5px;vertical-align:1px}
+.t-det::before{content:"■"}.t-llm::before{content:"●"}.t-wf::before{content:"▶"}.t-ag::before{content:"▲"}.t-hu::before{content:"✚"}
+.tg{display:inline-block;min-width:58px;font-weight:500}
+
+.hero{padding:44px 0 44px}
+.hgrid{display:grid;gap:32px;align-items:center}
+@media(min-width:900px){.hgrid{grid-template-columns:1.5fr 1fr}}
+.mini{display:grid;gap:12px;background:var(--ink);color:#ece9e0;border-radius:18px;padding:22px;text-decoration:none;box-shadow:0 18px 40px rgba(21,23,26,.25)}
+.mini .mono{color:#a79df5;margin:0}
+.mtrack{display:flex;justify-content:space-between;position:relative}
+.mtrack::before{content:"";position:absolute;left:0;right:0;top:5px;height:2px;background:#33383f}
+.mtrack i{position:relative;width:12px;height:12px;border-radius:50%;border:2px solid #4a5059;background:var(--ink);transition:.3s}
+.mtrack i.done{background:var(--d);border-color:var(--d)}
+.mini b{font-family:"Fraunces",serif;font-size:1.5rem;line-height:1.1}
+.mline{font-family:"IBM Plex Mono",monospace;font-size:.78rem;min-height:2.6em}
+.mgo{font-size:.85rem;font-weight:600;border-top:1px solid #33383f;padding-top:12px}
+
+.why{margin:8px 0 0;color:#c9ccd2;font-size:.9rem;min-height:2.9em}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px}
+.ctrl button{font:inherit;font-size:.85rem;font-weight:600;padding:8px 14px;border-radius:999px;border:1px solid #3a3f47;background:transparent;color:#ece9e0;cursor:pointer}
+.ctrl .pri{background:#ece9e0;color:var(--ink);border-color:#ece9e0}
+.track .pk{pointer-events:none}
+.track button.dot{padding:0;cursor:pointer}
+.track .dot::after{content:"";position:absolute;inset:-12px}
+.track .dot span{display:none}
+@media(min-width:760px){
+  .track{height:56px;margin:4px 46px 0}
+  .track .dot span{display:block;position:absolute;top:22px;left:50%;transform:translateX(-50%);white-space:nowrap;font:500 .68rem "IBM Plex Mono",monospace;color:#a9adb5}
+}
+@media(max-width:759px){.log{height:150px}.sim{padding:14px;gap:14px}}
+
+details.level{display:block;padding:0}
+details.level summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:48px 1fr 22px;gap:14px;align-items:center;padding:18px 20px}
+details.level summary::-webkit-details-marker{display:none}
+details.level summary::after{content:"+";font-family:"Fraunces",serif;font-size:1.7rem;color:var(--muted);text-align:center}
+details.level[open] summary::after{content:"\2212"}
+.level .desc{display:block;color:var(--muted);margin-top:4px;font-size:.95rem;font-family:"IBM Plex Sans",sans-serif}
+details.level dl{padding:0 20px 22px}
+@media(min-width:760px){details.level dl{grid-template-columns:1fr 1fr 1fr;gap:20px;padding-left:82px}}
+
+.quiz{margin-bottom:14px;border-top:5px solid var(--ag)}
+.qs{counter-reset:q}
+.box .qs li{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.yn{display:flex;gap:6px;flex:none}
+.yn button{font:inherit;font-size:.85rem;font-weight:600;padding:7px 14px;border-radius:999px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.yn button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.qres{margin-top:14px;padding:16px 18px;border-radius:12px;background:var(--paper);border:1px dashed var(--line);color:var(--muted)}
+.qres.done{border:2px solid var(--c);color:var(--ink);background:var(--card)}
+.qres b{display:block;font-family:"Fraunces",serif;font-size:1.35rem;color:var(--c)}
+.qres a{display:inline-block;margin-top:8px;font-weight:600}
+
+.legend button.tag{border:0;cursor:pointer;font-size:.78rem;padding:7px 13px}
+.legend button[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+.t-all{background:var(--ink);color:var(--paper)}
+.row[hidden]{display:none}
+
+.gloss{display:grid;gap:12px;margin:0}
+@media(min-width:760px){.gloss{grid-template-columns:1fr 1fr 1fr}}
+.gloss div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.gloss dt{font-weight:600}
+.gloss dd{margin:4px 0 0;color:var(--muted);font-size:.95rem}
+.grid2>*,.compare>*,.hgrid>*,.stagegrid>*{min-width:0}
+button.btn{font:inherit;font-weight:600;cursor:pointer;background:transparent;color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);background:var(--ink);color:var(--paper);padding:12px 18px;border-radius:999px;font-size:.88rem;opacity:0;pointer-events:none;transition:.3s;z-index:20;max-width:92vw;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+body.switched .pm,body.switched .eng{animation:flash 1.6s ease}
+@keyframes flash{0%{box-shadow:0 0 0 4px rgba(74,63,182,.5)}100%{box-shadow:0 0 0 4px rgba(74,63,182,0)}}
 </style>
 </head>
 <body data-view="pm">
 
 <header>
+  <div class="prog" id="prog"></div>
   <div class="wrap">
     <a class="brand" href="#topo">Pro<span>Agentes</span></a>
-    <div class="toggle" role="group" aria-label="Escolha a visão">
-      <button type="button" data-set="pm" aria-pressed="true">Visão PM</button>
-      <button type="button" data-set="eng" aria-pressed="false">Visão Engenharia</button>
+    <div class="tgl">
+      <span class="tlabel">Ler como</span>
+      <div class="toggle" role="group" aria-label="Ler como PM ou como engenharia">
+        <button type="button" data-set="pm" aria-pressed="true">PM</button>
+        <button type="button" data-set="eng" aria-pressed="false">Engenharia</button>
+      </div>
     </div>
   </div>
+  <nav class="wrap snav" id="snav" aria-label="Seções">
+    <a href="#demo">Simulação</a>
+    <a href="#niveis">Níveis</a>
+    <a href="#workflow-x-agente">Workflow x agente</a>
+    <a href="#quando">Quando criar</a>
+    <a href="#deterministico">Determinístico</a>
+    <a href="#caso">Caso do kit</a>
+    <a href="#glossario">Glossário</a>
+  </nav>
 </header>
+<div class="toast" id="toast" role="status"></div>
 
 <main id="topo">
 
 <div class="hero">
-  <div class="wrap">
+  <div class="wrap hgrid">
+   <div>
     <span class="mono">Guia prático de agentes de IA</span>
     <h1>Nem todo problema pede um agente. <em>Alguns pedem um if.</em></h1>
     <p class="lead">Um mapa para decidir entre regra, LLM, workflow e agente autônomo. E para saber onde a validação precisa ser determinística.</p>
-    <p class="persona pm">Visão PM: onde investir, que risco aceitar, como medir o resultado e o que prometer para o negócio.</p>
-    <p class="persona eng">Visão Engenharia: qual arquitetura usar, quais contratos definir, como testar e onde colocar as travas.</p>
+    <p class="persona pm">Lendo como PM: onde investir, que risco aceitar, como medir o resultado e o que prometer para o negócio.</p>
+    <p class="persona eng">Lendo como engenharia: qual arquitetura usar, quais contratos definir, como testar e onde colocar as travas.</p>
     <div class="cta">
       <a class="btn solid" href="#demo">Ver a esteira rodando</a>
-      <a class="btn" href="#niveis">Ver os níveis</a>
+      <a class="btn" href="#quando">Fazer o teste rápido</a>
     </div>
+   </div>
+   <a class="mini" href="#demo" aria-label="Ver a simulação completa de um kit de documentos">
+     <span class="mono">Kit em análise</span>
+     <div class="mtrack" id="mtrack"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+     <b id="mName">Recebimento</b>
+     <span class="mline" id="mLine"></span>
+     <span class="mgo">Ver a simulação completa ↓</span>
+   </a>
   </div>
 </div>
 
@@ -234,6 +346,15 @@ section.demo > .wrap > .mono{color:#a79df5}
       <div>
         <div class="track" id="track"><div class="rail"></div><div class="fill"></div><div class="pk"></div></div>
         <div class="now"><b id="nowName">Recebimento</b><span class="mono" id="nowIdx">1 / 7</span></div>
+        <p class="why" id="why"></p>
+        <p class="sr" id="simSr" aria-live="polite"></p>
+      </div>
+
+      <div class="ctrl">
+        <button type="button" class="pri" id="bPlay">Pausar</button>
+        <button type="button" id="bStep">Próximo passo</button>
+        <button type="button" id="bSpeed">Velocidade 1x</button>
+        <button type="button" id="replay">Reiniciar</button>
       </div>
 
       <div class="stagegrid">
@@ -256,8 +377,7 @@ section.demo > .wrap > .mono{color:#a79df5}
       <div class="verdict" id="verdict"><b>Aguardando decisão</b><span>O resultado aparece ao fim da esteira.</span></div>
 
       <div class="simfoot">
-        <span>Simulação ilustrativa com dados fictícios.</span>
-        <button type="button" class="replay" id="replay">Rodar de novo</button>
+        <span>Simulação ilustrativa com dados fictícios. Toque em uma etapa da trilha para ver o resultado dela.</span>
       </div>
     </div>
   </div>
@@ -267,78 +387,58 @@ section.demo > .wrap > .mono{color:#a79df5}
   <div class="wrap">
     <span class="mono">01 / Definições</span>
     <h2>Os 5 níveis, do código ao agente autônomo</h2>
-    <p class="intro">"Agente" virou nome para tudo. Na prática existe uma escada. Cada degrau entrega mais flexibilidade e cobra mais custo, latência e risco.</p>
+    <p class="intro">"Agente" virou nome para tudo. Na prática existe uma escada. Cada degrau entrega mais flexibilidade e cobra mais custo, latência e risco. Toque em um nível para abrir.</p>
 
     <div class="levels">
-      <article class="level" style="--c:var(--det)">
-        <div class="num">0</div>
-        <div>
-          <h3>Regra determinística</h3>
-          <p>Código puro. A mesma entrada sempre gera a mesma saída. Sem modelo.</p>
-        </div>
+      <details class="level" style="--c:var(--det)" open>
+        <summary><span class="num">0</span><span><h3>Regra determinística</h3><span class="desc">Código puro. A mesma entrada sempre gera a mesma saída. Sem modelo.</span></span></summary>
         <dl>
           <div><dt>Use quando</dt><dd>A regra cabe em um if, uma fórmula ou uma consulta.</dd></div>
           <div><dt>No kit</dt><dd>Dígito verificador de CNPJ, documento vencido, kit completo.</dd></div>
           <div class="pm"><dt>Para o PM</dt><dd>Custo quase zero e 100% auditável. Sempre a primeira opção.</dd></div>
           <div class="eng"><dt>Para a engenharia</dt><dd>Funções puras, testes unitários, motor de regras versionado.</dd></div>
         </dl>
-      </article>
+      </details>
 
-      <article class="level" style="--c:var(--llm)">
-        <div class="num">1</div>
-        <div>
-          <h3>Chamada única de LLM</h3>
-          <p>Um prompt, uma resposta estruturada. O modelo faz uma tarefa só.</p>
-        </div>
+      <details class="level" style="--c:var(--llm)">
+        <summary><span class="num">1</span><span><h3>Chamada única de LLM</h3><span class="desc">Um prompt, uma resposta estruturada. O modelo faz uma tarefa só.</span></span></summary>
         <dl>
           <div><dt>Use quando</dt><dd>A entrada é bagunçada (texto livre, imagem, PDF) e a tarefa é única: classificar, extrair, resumir.</dd></div>
           <div><dt>No kit</dt><dd>Reconhecer que o PDF é um contrato social e extrair os sócios.</dd></div>
           <div class="pm"><dt>Para o PM</dt><dd>Barato e rápido. Um modelo pequeno costuma resolver.</dd></div>
           <div class="eng"><dt>Para a engenharia</dt><dd>Saída em JSON com schema, temperatura baixa, confiança por campo.</dd></div>
         </dl>
-      </article>
+      </details>
 
-      <article class="level" style="--c:var(--wf)">
-        <div class="num">2</div>
-        <div>
-          <h3>Workflow</h3>
-          <p>Várias chamadas de LLM e de código em um caminho que você desenhou. Padrões comuns: encadeamento, roteamento, paralelização, gerador com revisor.</p>
-        </div>
+      <details class="level" style="--c:var(--wf)">
+        <summary><span class="num">2</span><span><h3>Workflow</h3><span class="desc">Várias chamadas de LLM e de código em um caminho que você desenhou. Padrões comuns: encadeamento, roteamento, paralelização, gerador com revisor.</span></span></summary>
         <dl>
           <div><dt>Use quando</dt><dd>Você conhece os passos de antemão e eles se repetem.</dd></div>
           <div><dt>No kit</dt><dd>Classificar → extrair → validar → cruzar com a Receita.</dd></div>
           <div class="pm"><dt>Para o PM</dt><dd>Previsível. Dá para estimar custo, prazo e taxa de acerto por etapa.</dd></div>
           <div class="eng"><dt>Para a engenharia</dt><dd>Grafo ou máquina de estados, retries, cada etapa testável isolada.</dd></div>
         </dl>
-      </article>
+      </details>
 
-      <article class="level" style="--c:var(--ag)">
-        <div class="num">3</div>
-        <div>
-          <h3>Agente com ferramentas</h3>
-          <p>O modelo decide qual ferramenta chamar e em que ordem, em loop, até atingir o objetivo. Escopo e limites definidos por você.</p>
-        </div>
+      <details class="level" style="--c:var(--ag)">
+        <summary><span class="num">3</span><span><h3>Agente com ferramentas</h3><span class="desc">O modelo decide qual ferramenta chamar e em que ordem, em loop, até atingir o objetivo. Escopo e limites definidos por você.</span></span></summary>
         <dl>
           <div><dt>Use quando</dt><dd>O caminho muda caso a caso e não dá para desenhar todos os ramos.</dd></div>
           <div><dt>No kit</dt><dd>Investigar divergência entre contrato social e quadro societário. Abrir a cadeia de sócios PJ até o beneficiário final.</dd></div>
           <div class="pm"><dt>Para o PM</dt><dd>Resolve as exceções que hoje caem no analista. Custo e tempo variam por caso.</dd></div>
           <div class="eng"><dt>Para a engenharia</dt><dd>Lista fechada de tools, limite de passos e de custo, log de cada decisão.</dd></div>
         </dl>
-      </article>
+      </details>
 
-      <article class="level" style="--c:var(--hu)">
-        <div class="num">4</div>
-        <div>
-          <h3>Agente autônomo e multiagente</h3>
-          <p>Planeja, executa tarefas longas e coordena outros agentes com pouca supervisão.</p>
-        </div>
+      <details class="level" style="--c:var(--hu)">
+        <summary><span class="num">4</span><span><h3>Agente autônomo e multiagente</h3><span class="desc">Planeja, executa tarefas longas e coordena outros agentes com pouca supervisão.</span></span></summary>
         <dl>
           <div><dt>Use quando</dt><dd>O problema é aberto, o valor é alto e o erro é reversível.</dd></div>
           <div><dt>No kit</dt><dd>Pesquisar mídia negativa e montar o dossiê para o analista de PLD.</dd></div>
           <div class="pm"><dt>Para o PM</dt><dd>Maior potencial e maior risco. Comece com um humano aprovando o resultado.</dd></div>
           <div class="eng"><dt>Para a engenharia</dt><dd>Sandbox, permissão mínima, checkpoints, avaliação contínua.</dd></div>
         </dl>
-      </article>
+      </details>
     </div>
 
     <div class="rule">Regra de ouro: suba um nível só quando o nível de baixo não resolve.</div>
@@ -385,6 +485,11 @@ section.demo > .wrap > .mono{color:#a79df5}
     <span class="mono">03 / Decisão</span>
     <h2>Quando criar um agente</h2>
     <p class="intro">Agente é a resposta para imprevisibilidade. Se o processo é previsível, ele só adiciona custo e risco.</p>
+    <div class="box quiz" id="quiz">
+      <h3>Teste rápido: seu caso pede um agente?</h3>
+      <ul class="qs" id="qs"></ul>
+      <div class="qres" id="qres" role="status">Responda as 5 perguntas para ver a recomendação.</div>
+    </div>
     <div class="compare">
       <div class="box yes">
         <h3>Crie quando</h3>
@@ -465,10 +570,14 @@ section.demo > .wrap > .mono{color:#a79df5}
     </ol>
 
     <h3 style="margin-bottom:14px">Quem valida o quê</h3>
-    <div class="legend">
-      <span class="tag t-det">Regra / API</span><span class="tag t-llm">LLM</span><span class="tag t-wf">Workflow</span><span class="tag t-ag">Agente</span><span class="tag t-hu">Humano</span>
+    <div class="legend" id="mfilter" role="group" aria-label="Filtrar por quem valida">
+      <button type="button" class="tag t-all" data-f="all" aria-pressed="true">Todos</button>
+      <button type="button" class="tag t-det" data-f="det" aria-pressed="false">Regra / API</button>
+      <button type="button" class="tag t-llm" data-f="llm" aria-pressed="false">LLM</button>
+      <button type="button" class="tag t-ag" data-f="ag" aria-pressed="false">Agente</button>
+      <button type="button" class="tag t-hu" data-f="hu" aria-pressed="false">Humano</button>
     </div>
-    <div class="matrix">
+    <div class="matrix" id="matrix">
       <div class="row"><span>Kit completo por tipo de cliente</span><span class="tags"><span class="tag t-det">Regra</span></span></div>
       <div class="row"><span>Tipo de cada arquivo enviado</span><span class="tags"><span class="tag t-llm">Mini LLM</span></span></div>
       <div class="row"><span>Legibilidade da imagem</span><span class="tags"><span class="tag t-llm">Mini LLM</span><span class="tag t-det">Limiar</span></span></div>
@@ -577,11 +686,44 @@ return APROVA</pre>
   </div>
 </section>
 
+<section id="glossario">
+  <div class="wrap">
+    <span class="mono">07 / Glossário</span>
+    <h2>Os termos, sem jargão</h2>
+    <p class="intro">Para quem não vive o dia a dia de cadastro e compliance.</p>
+    <dl class="gloss">
+      <div><dt>LLM</dt><dd>Modelo de linguagem. Lê e escreve texto muito bem, mas pode errar com segurança. Por isso não decide sozinho.</dd></div>
+      <div><dt>OCR</dt><dd>Tecnologia que transforma a imagem de um documento em texto.</dd></div>
+      <div><dt>Limiar de confiança</dt><dd>Nota mínima que uma extração precisa atingir para seguir sem revisão.</dd></div>
+      <div><dt>Quadro societário (QSA)</dt><dd>Lista de sócios e administradores de uma empresa registrada na Receita Federal.</dd></div>
+      <div><dt>CNAE</dt><dd>Código que identifica a atividade econômica da empresa. É o que define o segmento.</dd></div>
+      <div><dt>Beneficiário final</dt><dd>A pessoa física que de fato controla a empresa ou se beneficia dela, mesmo por trás de outras empresas.</dd></div>
+      <div><dt>PLD</dt><dd>Prevenção à lavagem de dinheiro. Controles para identificar clientes e operações suspeitas.</dd></div>
+      <div><dt>PEP</dt><dd>Pessoa exposta politicamente. Quem ocupa ou ocupou cargo público relevante, e pessoas próximas. Pede análise reforçada.</dd></div>
+      <div><dt>Lista restritiva</dt><dd>Relação de pessoas e empresas sob sanção ou restrição, nacional ou internacional.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section id="compartilhar">
+  <div class="wrap">
+    <span class="mono">Passe adiante</span>
+    <h2>Conhece alguém decidindo se precisa de um agente?</h2>
+    <p class="intro">Mande esta página. A simulação explica em um minuto o que uma reunião inteira não explica.</p>
+    <div class="cta">
+      <a class="btn solid" id="shareLi" href="https://www.linkedin.com/sharing/share-offsite/" target="_blank" rel="noopener">Compartilhar no LinkedIn</a>
+      <button type="button" class="btn" id="shareCopy">Copiar link</button>
+    </div>
+  </div>
+</section>
+
 </main>
 
 <footer>
   <div class="wrap">
     <p><b>ProAgentes.</b> Conteúdo educativo. Não substitui a avaliação de compliance, jurídico e segurança da sua empresa.</p>
+    <p>Referência: a distinção entre workflow e agente e os padrões de workflow seguem o artigo <a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">Building effective agents</a>, da Anthropic.</p>
+    <p>Atualizado em novembro de 2026. Código em <a href="https://github.com/rogerboletatech/proagentes" target="_blank" rel="noopener">github.com/rogerboletatech/proagentes</a>.</p>
   </div>
 </footer>
 
@@ -592,7 +734,17 @@ return APROVA</pre>
     document.body.dataset.view = v;
     btns.forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.set === v)); });
   }
-  btns.forEach(function(b){ b.addEventListener('click', function(){ set(b.dataset.set); }); });
+  var toast = document.getElementById('toast'), tt, ft;
+  window.proToast = function(msg){
+    toast.textContent = msg; toast.classList.add('show');
+    clearTimeout(tt); tt = setTimeout(function(){ toast.classList.remove('show'); }, 2600);
+  };
+  btns.forEach(function(b){ b.addEventListener('click', function(){
+    var v = b.dataset.set; set(v);
+    document.body.classList.remove('switched'); void document.body.offsetWidth; document.body.classList.add('switched');
+    clearTimeout(ft); ft = setTimeout(function(){ document.body.classList.remove('switched'); }, 1700);
+    window.proToast('Lendo como ' + (v === 'pm' ? 'PM' : 'engenharia') + ': ' + document.querySelectorAll('.' + v).length + ' trechos adaptados nos níveis e na seção 06');
+  }); });
   var q = new URLSearchParams(location.search).get('visao');
   if (q === 'eng' || q === 'pm') set(q);
 })();
@@ -618,8 +770,21 @@ return APROVA</pre>
   var log = document.getElementById('log'), verdict = document.getElementById('verdict');
   var dots = [], dcs = [], counts = {}, runId = 0, current = 'limpo';
 
-  ST.forEach(function(_, i){
-    var d = document.createElement('div'); d.className = 'dot'; d.style.left = (i / 6 * 100) + '%';
+  var WHY = [
+    'Regra: conferir se o kit está completo é uma lista de checagem. Não precisa de modelo.',
+    'LLM pequeno: os arquivos chegam sem padrão, e reconhecer o tipo é tarefa de leitura.',
+    'OCR com LLM pequeno: transforma imagem e PDF em campos. A saída precisa caber no schema.',
+    'Regra: dígito, data e limiar têm resposta única. Tem que dar igual toda vez.',
+    'API e regra: o dado oficial vem da fonte, nunca da memória do modelo.',
+    'Regra primeiro. O agente só entra se houver divergência ou um sócio que é outra empresa.',
+    'Regra: a política decide. Risco alto vai para uma pessoa, com o dossiê pronto.'
+  ];
+  var why = document.getElementById('why'), sr = document.getElementById('simSr');
+  ST.forEach(function(name, i){
+    var d = document.createElement('button'); d.type = 'button'; d.className = 'dot'; d.style.left = (i / 6 * 100) + '%';
+    d.setAttribute('aria-label', 'Ver resultado da etapa ' + (i + 1) + ': ' + name);
+    var lb = document.createElement('span'); lb.textContent = name; d.appendChild(lb);
+    d.addEventListener('click', function(){ jump(i); });
     track.insertBefore(d, pk); dots.push(d);
   });
   DOCS.forEach(function(doc){
@@ -702,6 +867,7 @@ return APROVA</pre>
     dots.forEach(function(d, k){ d.className = 'dot' + (k <= i ? ' done' : ''); });
     document.getElementById('nowName').textContent = ST[i];
     document.getElementById('nowIdx').textContent = (i + 1) + ' / 7';
+    why.textContent = WHY[i]; sr.textContent = 'Etapa ' + (i + 1) + ' de 7: ' + ST[i];
   }
   function reset(){
     setStage(0);
@@ -737,31 +903,156 @@ return APROVA</pre>
       verdict.className = 'verdict ' + ev[1];
       verdict.firstChild.textContent = ev[2];
       verdict.lastChild.textContent = ev[3];
+      sr.textContent = 'Decisão: ' + ev[2] + '. ' + ev[3];
     }
   }
   function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
-  async function run(key){
-    var id = ++runId; current = key;
+  var evs = [], idx = 0, playing = false, speed = 1, loopId = 0, SPEEDS = [1, 2, .5];
+  var bPlay = document.getElementById('bPlay'), bSpeed = document.getElementById('bSpeed');
+  function ui(){ bPlay.textContent = playing ? 'Pausar' : (idx >= evs.length ? 'Rodar de novo' : 'Continuar'); }
+  function load(key){
+    loopId++; playing = false; current = key;
     root.querySelectorAll('.chips button').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.sc === key)); });
-    reset();
-    var evs = prefix().concat(SC[key]);
-    if (!reduce) await sleep(500);
-    for (var i = 0; i < evs.length; i++) {
-      if (id !== runId) return;
-      apply(evs[i]);
-      if (!reduce) await sleep(DELAY[evs[i][0]]);
-    }
+    evs = prefix().concat(SC[key]); idx = 0; reset(); ui();
   }
-  root.querySelectorAll('.chips button').forEach(function(b){ b.addEventListener('click', function(){ run(b.dataset.sc); }); });
-  document.getElementById('replay').addEventListener('click', function(){ run(current); });
+  async function play(){
+    if (idx >= evs.length) load(current);
+    var id = ++loopId; playing = true; ui();
+    while (id === loopId && idx < evs.length) {
+      var ev = evs[idx++]; apply(ev);
+      await sleep(DELAY[ev[0]] / speed);
+    }
+    if (id === loopId) { playing = false; ui(); }
+  }
+  function pause(){ loopId++; playing = false; ui(); }
+  function step(){
+    pause(); if (idx >= evs.length) return;
+    var ev; do { ev = evs[idx++]; apply(ev); } while (idx < evs.length && ev[0] !== 'l' && ev[0] !== 'v');
+    ui();
+  }
+  function jump(st){
+    pause(); reset(); idx = 0;
+    while (idx < evs.length) { var ev = evs[idx]; if (ev[0] === 's' && ev[1] > st) break; apply(ev); idx++; }
+    ui();
+  }
+  root.querySelectorAll('.chips button').forEach(function(b){ b.addEventListener('click', function(){ load(b.dataset.sc); play(); }); });
+  bPlay.addEventListener('click', function(){ playing ? pause() : play(); });
+  document.getElementById('bStep').addEventListener('click', step);
+  document.getElementById('replay').addEventListener('click', function(){ load(current); play(); });
+  bSpeed.addEventListener('click', function(){
+    speed = SPEEDS[(SPEEDS.indexOf(speed) + 1) % SPEEDS.length];
+    bSpeed.textContent = 'Velocidade ' + String(speed).replace('.', ',') + 'x';
+  });
 
-  reset();
-  if ('IntersectionObserver' in window) {
+  load('limpo');
+  if (reduce) jump(6);
+  else if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function(en){
-      if (en[0].isIntersecting) { io.disconnect(); run('limpo'); }
+      if (en[0].isIntersecting) { io.disconnect(); play(); }
     }, {threshold:.25});
     io.observe(root);
-  } else run('limpo');
+  } else play();
+})();
+
+/* previa no topo */
+(function(){
+  var dots = document.querySelectorAll('#mtrack i'), name = document.getElementById('mName'), line = document.getElementById('mLine');
+  if (!dots.length) return;
+  var TAG = {det:'REGRA', llm:'LLM', ag:'AGENTE'};
+  var S = [['Recebimento','det','Kit completo: 5 de 5'],['Classificação','llm','Contrato social reconhecido'],['Extração','llm','42 campos extraídos'],
+           ['Regras','det','CNPJ e validade ok'],['Receita','det','Situação cadastral ativa'],['Sócios e PLD','ag','Agente abre a cadeia societária'],['Decisão','det','Aprovado sem analista']];
+  var i = 0;
+  function show(k){
+    dots.forEach(function(d, j){ d.className = j <= k ? 'done' : ''; });
+    name.textContent = S[k][0];
+    line.textContent = '';
+    var tg = document.createElement('span'); tg.className = 'tg k-' + S[k][1]; tg.textContent = TAG[S[k][1]];
+    line.appendChild(tg); line.appendChild(document.createTextNode(S[k][2]));
+  }
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches) { show(6); return; }
+  show(0); setInterval(function(){ i = (i + 1) % S.length; show(i); }, 1400);
+})();
+
+/* navegacao e progresso */
+(function(){
+  var prog = document.getElementById('prog'), links = document.querySelectorAll('#snav a'), map = {};
+  links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  function onScroll(){
+    var h = document.documentElement.scrollHeight - innerHeight;
+    prog.style.width = (h > 0 ? Math.min(100, scrollY / h * 100) : 0) + '%';
+  }
+  addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  if (!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(en){
+    en.forEach(function(e){
+      if (!e.isIntersecting) return;
+      links.forEach(function(a){ a.classList.remove('on'); });
+      var a = map[e.target.id]; a.classList.add('on');
+      var nav = a.parentNode; nav.scrollTo({left: a.offsetLeft - nav.offsetLeft - 20, behavior:'smooth'});
+    });
+  }, {rootMargin:'-35% 0px -60% 0px'});
+  Object.keys(map).forEach(function(id){ var el = document.getElementById(id); if (el) io.observe(el); });
+})();
+
+/* teste rapido */
+(function(){
+  var list = document.getElementById('qs'), res = document.getElementById('qres'); if (!list) return;
+  var Q = ['A entrada é bagunçada? Texto livre, imagem ou PDF sem padrão.',
+           'A tarefa tem mais de um passo?',
+           'Você consegue desenhar todos os passos de antemão?',
+           'É uma tarefa longa e aberta, que exige planejamento próprio?',
+           'Um erro seria irreversível ou teria impacto regulatório?'];
+  var LV = [['Nível 0: regra determinística','Código resolve. Não gaste modelo aqui.','var(--det)'],
+            ['Nível 1: chamada única de LLM','Um modelo pequeno com saída estruturada dá conta.','var(--llm)'],
+            ['Nível 2: workflow','Você conhece os passos. Orquestre LLM e código em um fluxo fixo.','var(--wf)'],
+            ['Nível 3: agente com ferramentas','O caminho varia caso a caso. Dê ferramentas e limites claros ao modelo.','var(--ag)'],
+            ['Nível 4: agente autônomo','Tarefa aberta e longa. Comece com uma pessoa aprovando o resultado.','var(--hu)']];
+  var ans = [null, null, null, null, null];
+  Q.forEach(function(q, i){
+    var li = document.createElement('li'), t = document.createElement('span'), yn = document.createElement('span');
+    t.textContent = q; yn.className = 'yn'; yn.setAttribute('role', 'group'); yn.setAttribute('aria-label', q);
+    [['Sim', true], ['Não', false]].forEach(function(o){
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = o[0]; b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', function(){
+        ans[i] = o[1];
+        yn.querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-pressed', String(x === b)); });
+        render();
+      });
+      yn.appendChild(b);
+    });
+    li.appendChild(t); li.appendChild(yn); list.appendChild(li);
+  });
+  function render(){
+    var left = ans.filter(function(a){ return a === null; }).length;
+    if (left) { res.className = 'qres'; res.textContent = 'Faltam ' + left + ' de 5 respostas.'; return; }
+    var messy = ans[0], multi = ans[1], known = ans[2], open = ans[3], irr = ans[4];
+    var lv = !multi ? (messy ? 1 : 0) : known ? (messy ? 2 : 0) : (open ? 4 : 3);
+    var note = '';
+    if (irr && lv >= 3) note = ' Como o erro é irreversível, deixe a decisão final em regra, com uma pessoa aprovando, e considere começar pelo nível ' + (lv - 1) + '.';
+    else if (irr && lv >= 1) note = ' Como o erro é irreversível, o modelo só extrai e interpreta. A decisão final fica em código.';
+    res.className = 'qres done'; res.style.setProperty('--c', LV[lv][2]); res.textContent = '';
+    var b = document.createElement('b'); b.textContent = LV[lv][0];
+    var a = document.createElement('a'); a.href = '#niveis'; a.textContent = 'Ver detalhes deste nível';
+    a.addEventListener('click', function(){ document.querySelectorAll('details.level').forEach(function(d, k){ d.open = k === lv; }); });
+    res.appendChild(b); res.appendChild(document.createTextNode(LV[lv][1] + note)); res.appendChild(document.createElement('br')); res.appendChild(a);
+  }
+})();
+
+/* filtro da matriz e compartilhar */
+(function(){
+  var fb = document.querySelectorAll('#mfilter button'), rows = document.querySelectorAll('#matrix .row');
+  fb.forEach(function(b){ b.addEventListener('click', function(){
+    var f = b.dataset.f;
+    fb.forEach(function(x){ x.setAttribute('aria-pressed', String(x === b)); });
+    rows.forEach(function(r){ r.hidden = f !== 'all' && !r.querySelector('.t-' + f); });
+  }); });
+  var url = location.origin + location.pathname;
+  var li = document.getElementById('shareLi'); if (li) li.href = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(url);
+  var cp = document.getElementById('shareCopy');
+  if (cp) cp.addEventListener('click', function(){
+    try { navigator.clipboard.writeText(url).then(function(){ window.proToast('Link copiado'); }, function(){ window.proToast(url); }); }
+    catch (e) { window.proToast(url); }
+  });
 })();
 </script>
 </body>
