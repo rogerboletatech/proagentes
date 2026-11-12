@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProAgentes | Quando criar um agente de IA</title>
+<meta name="description" content="Guia prático para PMs e engenheiros: níveis de agentes de IA, workflow x autônomo, e onde a validação precisa ser determinística. Com o caso do kit de documentação.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f4f1ea; --card:#fbf9f4; --ink:#15171a; --muted:#5b6068; --line:#d9d4c7;
+  --det:#0b6e4f; --det-bg:#dff1e9;
+  --llm:#a14a06; --llm-bg:#fbe9d3;
+  --wf:#1f5fa8; --wf-bg:#dfeaf8;
+  --ag:#4a3fb6; --ag-bg:#e6e3fa;
+  --hu:#8a1c3a; --hu-bg:#f7dfe6;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Fraunces",Georgia,serif;line-height:1.12;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(2.4rem,7vw,4.6rem);font-weight:700}
+h2{font-size:clamp(1.8rem,4.5vw,2.8rem);font-weight:700}
+h3{font-size:1.3rem;font-weight:500}
+p{margin:0 0 1em}
+a{color:inherit}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+.mono{font-family:"IBM Plex Mono",monospace;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase}
+.muted{color:var(--muted)}
+
+/* header */
+header{position:sticky;top:0;z-index:10;background:rgba(244,241,234,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:10px;padding-bottom:10px}
+.brand{font-family:"Fraunces",serif;font-weight:700;font-size:1.15rem;text-decoration:none}
+.brand span{color:var(--ag)}
+.toggle{display:flex;border:1.5px solid var(--ink);border-radius:999px;padding:3px;background:var(--card)}
+.toggle button{font:inherit;font-size:.85rem;font-weight:600;border:0;background:transparent;color:var(--ink);padding:7px 14px;border-radius:999px;cursor:pointer}
+.toggle button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+/* persona visibility */
+body[data-view="pm"] .eng{display:none!important}
+body[data-view="eng"] .pm{display:none!important}
+
+/* hero */
+.hero{padding:64px 0 48px;border-bottom:1px solid var(--line)}
+.hero .mono{color:var(--ag);margin-bottom:18px;display:block}
+.hero h1 em{font-style:italic;font-weight:500;color:var(--det)}
+.hero .lead{font-size:1.2rem;max-width:640px;margin:22px 0 10px}
+.persona{border-left:3px solid var(--ag);padding:4px 0 4px 14px;max-width:640px;margin:18px 0 28px;color:var(--muted)}
+.cta{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-block;padding:13px 20px;border-radius:8px;font-weight:600;text-decoration:none;border:1.5px solid var(--ink)}
+.btn.solid{background:var(--ink);color:var(--paper)}
+
+section{padding:64px 0;border-bottom:1px solid var(--line)}
+section > .wrap > .mono{color:var(--muted);display:block;margin-bottom:10px}
+.intro{max-width:680px;margin:14px 0 32px;color:var(--muted)}
+
+/* tags */
+.tag{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:500;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.t-det{background:var(--det-bg);color:var(--det)}
+.t-llm{background:var(--llm-bg);color:var(--llm)}
+.t-wf{background:var(--wf-bg);color:var(--wf)}
+.t-ag{background:var(--ag-bg);color:var(--ag)}
+.t-hu{background:var(--hu-bg);color:var(--hu)}
+
+/* levels */
+.levels{display:grid;gap:14px}
+.level{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;display:grid;gap:14px;grid-template-columns:1fr;border-left:6px solid var(--c)}
+.level .num{font-family:"Fraunces",serif;font-size:2.6rem;font-weight:700;line-height:1;color:var(--c)}
+.level dl{margin:0;display:grid;gap:10px}
+.level dt{font-family:"IBM Plex Mono",monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.level dd{margin:2px 0 0}
+.level p{margin:6px 0 0}
+@media(min-width:760px){
+  .level{grid-template-columns:90px 1fr 1fr;align-items:start;padding:28px}
+}
+.rule{margin-top:26px;padding:20px 22px;background:var(--ink);color:var(--paper);border-radius:14px;font-family:"Fraunces",serif;font-size:1.3rem;line-height:1.3}
+
+/* compare */
+.compare{display:grid;gap:14px}
+@media(min-width:760px){.compare{grid-template-columns:1fr 1fr}}
+.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
+.box h3{margin-bottom:6px}
+.box ul{margin:14px 0 0;padding:0;list-style:none}
+.box li{padding:10px 0;border-top:1px solid var(--line)}
+.box li b{display:block;font-family:"IBM Plex Mono",monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:500}
+.box.yes{border-top:5px solid var(--det)}
+.box.no{border-top:5px solid var(--hu)}
+.box.wf{border-top:5px solid var(--wf)}
+.box.ag{border-top:5px solid var(--ag)}
+.check li{padding-left:26px;position:relative}
+.check li::before{content:"";position:absolute;left:2px;top:18px;width:12px;height:12px;border-radius:3px;background:var(--mk)}
+.yes .check{--mk:var(--det)} .no .check{--mk:var(--hu)}
+.det .check{--mk:var(--det)} .prob .check{--mk:var(--llm)}
+.box.det{border-top:5px solid var(--det)} .box.prob{border-top:5px solid var(--llm)}
+
+.principle{font-family:"Fraunces",serif;font-size:clamp(1.6rem,4.4vw,2.5rem);line-height:1.15;margin:8px 0 28px;max-width:760px}
+.principle .a{color:var(--llm)} .principle .b{color:var(--det)}
+
+/* pipeline */
+.pipe{counter-reset:s;display:grid;gap:10px;margin:0 0 40px;padding:0;list-style:none}
+.pipe li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px 16px 58px;position:relative}
+.pipe li::before{content:counter(s);position:absolute;left:16px;top:16px;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--paper);font-family:"IBM Plex Mono",monospace;font-size:.8rem;display:grid;place-items:center}
+.pipe b{display:block}
+.pipe .tag{margin:8px 6px 0 0}
+.pipe span.d{color:var(--muted);font-size:.95rem}
+
+.matrix{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
+.row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:14px 18px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row .tags{display:flex;flex-wrap:wrap;gap:6px}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+
+.docs{display:grid;gap:14px;margin-top:40px}
+@media(min-width:760px){.docs{grid-template-columns:repeat(3,1fr)}}
+.note{margin-top:28px;padding:18px 20px;border:1.5px dashed var(--hu);border-radius:12px;background:var(--hu-bg);color:#4d0f20}
+
+/* persona section */
+.grid2{display:grid;gap:14px}
+@media(min-width:760px){.grid2{grid-template-columns:1fr 1fr}}
+.phase{display:grid;gap:10px;margin-top:14px}
+.phase div{padding:14px 16px;background:var(--paper);border-radius:10px;border:1px solid var(--line)}
+pre{margin:14px 0 0;background:var(--ink);color:#e9e6dd;padding:18px;border-radius:12px;overflow-x:auto;font-family:"IBM Plex Mono",monospace;font-size:.8rem;line-height:1.55}
+pre .k{color:#9fd8c0} pre .c{color:#8b9099}
+
+footer{padding:40px 0 60px;color:var(--muted);font-size:.9rem}
+</style>
+</head>
+<body data-view="pm">
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="#topo">Pro<span>Agentes</span></a>
+    <div class="toggle" role="group" aria-label="Escolha a visão">
+      <button type="button" data-set="pm" aria-pressed="true">Visão PM</button>
+      <button type="button" data-set="eng" aria-pressed="false">Visão Engenharia</button>
+    </div>
+  </div>
+</header>
+
+<main id="topo">
+
+<div class="hero">
+  <div class="wrap">
+    <span class="mono">Guia prático de agentes de IA</span>
+    <h1>Nem todo problema pede um agente. <em>Alguns pedem um if.</em></h1>
+    <p class="lead">Um mapa para decidir entre regra, LLM, workflow e agente autônomo. E para saber onde a validação precisa ser determinística.</p>
+    <p class="persona pm">Visão PM: onde investir, que risco aceitar, como medir o resultado e o que prometer para o negócio.</p>
+    <p class="persona eng">Visão Engenharia: qual arquitetura usar, quais contratos definir, como testar e onde colocar as travas.</p>
+    <div class="cta">
+      <a class="btn solid" href="#niveis">Ver os níveis</a>
+      <a class="btn" href="#caso">Caso: kit de documentação</a>
+    </div>
+  </div>
+</div>
+
+<section id="niveis">
+  <div class="wrap">
+    <span class="mono">01 / Definições</span>
+    <h2>Os 5 níveis, do código ao agente autônomo</h2>
+    <p class="intro">"Agente" virou nome para tudo. Na prática existe uma escada. Cada degrau entrega mais flexibilidade e cobra mais custo, latência e risco.</p>
+
+    <div class="levels">
+      <article class="level" style="--c:var(--det)">
+        <div class="num">0</div>
+        <div>
+          <h3>Regra determinística</h3>
+          <p>Código puro. A mesma entrada sempre gera a mesma saída. Sem modelo.</p>
+        </div>
+        <dl>
+          <div><dt>Use quando</dt><dd>A regra cabe em um if, uma fórmula ou uma consulta.</dd></div>
+          <div><dt>No kit</dt><dd>Dígito verificador de CNPJ, documento vencido, kit completo.</dd></div>
+          <div class="pm"><dt>Para o PM</dt><dd>Custo quase zero e 100% auditável. Sempre a primeira opção.</dd></div>
+          <div class="eng"><dt>Para a engenharia</dt><dd>Funções puras, testes unitários, motor de regras versionado.</dd></div>
+        </dl>
+      </article>
+
+      <article class="level" style="--c:var(--llm)">
+        <div class="num">1</div>
+        <div>
+          <h3>Chamada única de LLM</h3>
+          <p>Um prompt, uma resposta estruturada. O modelo faz uma tarefa só.</p>
+        </div>
+        <dl>
+          <div><dt>Use quando</dt><dd>A entrada é bagunçada (texto livre, imagem, PDF) e a tarefa é única: classificar, extrair, resumir.</dd></div>
+          <div><dt>No kit</dt><dd>Reconhecer que o PDF é um contrato social e extrair os sócios.</dd></div>
+          <div class="pm"><dt>Para o PM</dt><dd>Barato e rápido. Um modelo pequeno costuma resolver.</dd></div>
+          <div class="eng"><dt>Para a engenharia</dt><dd>Saída em JSON com schema, temperatura baixa, confiança por campo.</dd></div>
+        </dl>
+      </article>
+
+      <article class="level" style="--c:var(--wf)">
+        <div class="num">2</div>
+        <div>
+          <h3>Workflow</h3>
+          <p>Várias chamadas de LLM e de código em um caminho que você desenhou. Padrões comuns: encadeamento, roteamento, paralelização, gerador com revisor.</p>
+        </div>
+        <dl>
+          <div><dt>Use quando</dt><dd>Você conhece os passos de antemão e eles se repetem.</dd></div>
+          <div><dt>No kit</dt><dd>Classificar → extrair → validar → cruzar com a Receita.</dd></div>
+          <div class="pm"><dt>Para o PM</dt><dd>Previsível. Dá para estimar custo, prazo e taxa de acerto por etapa.</dd></div>
+          <div class="eng"><dt>Para a engenharia</dt><dd>Grafo ou máquina de estados, retries, cada etapa testável isolada.</dd></div>
+        </dl>
+      </article>
+
+      <article class="level" style="--c:var(--ag)">
+        <div class="num">3</div>
+        <div>
+          <h3>Agente com ferramentas</h3>
+          <p>O modelo decide qual ferramenta chamar e em que ordem, em loop, até atingir o objetivo. Escopo e limites definidos por você.</p>
+        </div>
+        <dl>
+          <div><dt>Use quando</dt><dd>O caminho muda caso a caso e não dá para desenhar todos os ramos.</dd></div>
+          <div><dt>No kit</dt><dd>Investigar divergência entre contrato social e quadro societário. Abrir a cadeia de sócios PJ até o beneficiário final.</dd></div>
+          <div class="pm"><dt>Para o PM</dt><dd>Resolve as exceções que hoje caem no analista. Custo e tempo variam por caso.</dd></div>
+          <div class="eng"><dt>Para a engenharia</dt><dd>Lista fechada de tools, limite de passos e de custo, log de cada decisão.</dd></div>
+        </dl>
+      </article>
+
+      <article class="level" style="--c:var(--hu)">
+        <div class="num">4</div>
+        <div>
+          <h3>Agente autônomo e multiagente</h3>
+          <p>Planeja, executa tarefas longas e coordena outros agentes com pouca supervisão.</p>
+        </div>
+        <dl>
+          <div><dt>Use quando</dt><dd>O problema é aberto, o valor é alto e o erro é reversível.</dd></div>
+          <div><dt>No kit</dt><dd>Pesquisar mídia negativa e montar o dossiê para o analista de PLD.</dd></div>
+          <div class="pm"><dt>Para o PM</dt><dd>Maior potencial e maior risco. Comece com um humano aprovando o resultado.</dd></div>
+          <div class="eng"><dt>Para a engenharia</dt><dd>Sandbox, permissão mínima, checkpoints, avaliação contínua.</dd></div>
+        </dl>
+      </article>
+    </div>
+
+    <div class="rule">Regra de ouro: suba um nível só quando o nível de baixo não resolve.</div>
+  </div>
+</section>
+
+<section id="workflow-x-agente">
+  <div class="wrap">
+    <span class="mono">02 / Comparação</span>
+    <h2>Workflow x agente autônomo</h2>
+    <p class="intro">A diferença central é quem decide o próximo passo: você ou o modelo.</p>
+    <div class="compare">
+      <div class="box wf">
+        <span class="tag t-wf">Workflow</span>
+        <h3 style="margin-top:10px">O caminho é seu</h3>
+        <ul>
+          <li><b>Quem decide os passos</b>O código. O LLM atua dentro de cada etapa.</li>
+          <li><b>Previsibilidade</b>Alta. Mesmo fluxo toda vez.</li>
+          <li><b>Custo e latência</b>Fixos e estimáveis.</li>
+          <li><b>Teste</b>Etapa por etapa, com casos conhecidos.</li>
+          <li><b>Auditoria</b>Simples. Cada etapa tem entrada e saída registradas.</li>
+          <li><b>Melhor para</b>Processo repetitivo, regulado e de alto volume.</li>
+        </ul>
+      </div>
+      <div class="box ag">
+        <span class="tag t-ag">Agente autônomo</span>
+        <h3 style="margin-top:10px">O caminho é do modelo</h3>
+        <ul>
+          <li><b>Quem decide os passos</b>O modelo, a cada volta do loop.</li>
+          <li><b>Previsibilidade</b>Menor. Dois casos iguais podem seguir rotas diferentes.</li>
+          <li><b>Custo e latência</b>Variáveis. Precisa de teto.</li>
+          <li><b>Teste</b>Por resultado final e por trajetória, em um conjunto de casos de referência.</li>
+          <li><b>Auditoria</b>Exige log completo de raciocínio e chamadas.</li>
+          <li><b>Melhor para</b>Exceções, investigação e tarefas abertas.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="intro" style="margin-bottom:0">Na vida real os dois convivem: um workflow cuida do fluxo principal e chama um agente só nos pontos em que o caminho é imprevisível.</p>
+  </div>
+</section>
+
+<section id="quando">
+  <div class="wrap">
+    <span class="mono">03 / Decisão</span>
+    <h2>Quando criar um agente</h2>
+    <p class="intro">Agente é a resposta para imprevisibilidade. Se o processo é previsível, ele só adiciona custo e risco.</p>
+    <div class="compare">
+      <div class="box yes">
+        <h3>Crie quando</h3>
+        <ul class="check">
+          <li>O número e a ordem dos passos mudam de caso para caso.</li>
+          <li>Desenhar todos os ramos em um fluxograma ficou inviável.</li>
+          <li>O valor de resolver o caso paga o custo e a espera.</li>
+          <li>O erro é detectável e reversível antes de causar dano.</li>
+          <li>Existe um jeito claro de medir se o resultado está certo.</li>
+        </ul>
+      </div>
+      <div class="box no">
+        <h3>Não crie quando</h3>
+        <ul class="check">
+          <li>Uma regra, uma consulta ou uma fórmula resolve.</li>
+          <li>Os passos são sempre os mesmos. Isso é um workflow.</li>
+          <li>A resposta precisa ser idêntica toda vez.</li>
+          <li>O erro é irreversível ou tem impacto regulatório direto.</li>
+          <li>Ninguém consegue dizer como avaliar a saída.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="deterministico">
+  <div class="wrap">
+    <span class="mono">04 / Validação</span>
+    <h2>Onde tem que ser determinístico</h2>
+    <p class="principle"><span class="a">O LLM lê e interpreta.</span> <span class="b">O código decide.</span></p>
+    <div class="compare">
+      <div class="box det">
+        <span class="tag t-det">Determinístico</span>
+        <h3 style="margin-top:10px">Sempre em código</h3>
+        <ul class="check">
+          <li>Cálculo e aritmética.</li>
+          <li>Formato e dígito verificador (CPF, CNPJ).</li>
+          <li>Datas, prazos e validade.</li>
+          <li>Dado oficial: vem da consulta à fonte, nunca da memória do modelo.</li>
+          <li>Comparação com listas restritivas, com algoritmo de similaridade e limiar definido.</li>
+          <li>Regras de política e de alçada.</li>
+          <li>Decisão final de aprovar ou reprovar.</li>
+          <li>Trilha de auditoria.</li>
+        </ul>
+      </div>
+      <div class="box prob">
+        <span class="tag t-llm">Probabilístico</span>
+        <h3 style="margin-top:10px">Onde o LLM entra bem</h3>
+        <ul class="check">
+          <li>Ler documento escaneado, foto torta, PDF sem padrão.</li>
+          <li>Classificar o tipo de documento.</li>
+          <li>Extrair campos para um formato estruturado.</li>
+          <li>Normalizar nomes, endereços e razões sociais.</li>
+          <li>Interpretar cláusulas: quem assina, com quais poderes.</li>
+          <li>Resumir o caso para o analista.</li>
+          <li>Explicar a pendência para o cliente em linguagem simples.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="intro" style="margin-bottom:0">O padrão que funciona: o LLM transforma o documento em dados, o código valida os dados contra regras e fontes oficiais, e só o que sobra de dúvida vai para um agente ou para uma pessoa.</p>
+  </div>
+</section>
+
+<section id="caso">
+  <div class="wrap">
+    <span class="mono">05 / Caso prático</span>
+    <h2>Kit de documentação no CRM</h2>
+    <p class="intro">Cenário: a empresa tem um CRM e um portal onde o cliente envia o kit de documentos para ser aprovado. Hoje um analista abre arquivo por arquivo. O objetivo é tirar o fator humano de quase toda a validação.</p>
+
+    <ol class="pipe">
+      <li><b>Recebimento e completude</b><span class="d">O kit tem todos os documentos exigidos para aquele tipo de cliente?</span><br><span class="tag t-det">Regra</span></li>
+      <li><b>Classificação e qualidade</b><span class="d">Que documento é cada arquivo? Está legível?</span><br><span class="tag t-llm">Mini LLM</span></li>
+      <li><b>Extração</b><span class="d">OCR e modelo pequeno transformam cada documento em campos estruturados com nível de confiança.</span><br><span class="tag t-llm">OCR + mini LLM</span></li>
+      <li><b>Validações de regra</b><span class="d">Dígitos, datas, campos obrigatórios, coerência entre documentos.</span><br><span class="tag t-det">Regra</span></li>
+      <li><b>Fontes oficiais</b><span class="d">Situação cadastral, segmento (CNAE) e quadro societário consultados na Receita e comparados com a política.</span><br><span class="tag t-det">API + regra</span></li>
+      <li><b>Sócios e prevenção à lavagem de dinheiro</b><span class="d">Sócios do contrato x quadro societário, listas de sanções, pessoas expostas politicamente, mídia negativa, beneficiário final.</span><br><span class="tag t-det">Regra</span><span class="tag t-ag">Agente</span><span class="tag t-hu">Humano</span></li>
+      <li><b>Decisão e roteamento</b><span class="d">Aprovação automática, pendência devolvida ao cliente ou fila de revisão humana com o dossiê pronto.</span><br><span class="tag t-det">Regra</span></li>
+    </ol>
+
+    <h3 style="margin-bottom:14px">Quem valida o quê</h3>
+    <div class="legend">
+      <span class="tag t-det">Regra / API</span><span class="tag t-llm">LLM</span><span class="tag t-wf">Workflow</span><span class="tag t-ag">Agente</span><span class="tag t-hu">Humano</span>
+    </div>
+    <div class="matrix">
+      <div class="row"><span>Kit completo por tipo de cliente</span><span class="tags"><span class="tag t-det">Regra</span></span></div>
+      <div class="row"><span>Tipo de cada arquivo enviado</span><span class="tags"><span class="tag t-llm">Mini LLM</span></span></div>
+      <div class="row"><span>Legibilidade da imagem</span><span class="tags"><span class="tag t-llm">Mini LLM</span><span class="tag t-det">Limiar</span></span></div>
+      <div class="row"><span>Extração de campos</span><span class="tags"><span class="tag t-llm">OCR + mini LLM</span></span></div>
+      <div class="row"><span>CPF e CNPJ válidos</span><span class="tags"><span class="tag t-det">Regra</span></span></div>
+      <div class="row"><span>Validade e data de emissão</span><span class="tags"><span class="tag t-det">Regra</span></span></div>
+      <div class="row"><span>Situação cadastral na Receita</span><span class="tags"><span class="tag t-det">API + regra</span></span></div>
+      <div class="row"><span>Segmento (CNAE) dentro da política</span><span class="tags"><span class="tag t-det">API + regra</span></span></div>
+      <div class="row"><span>Sócios do contrato x quadro societário</span><span class="tags"><span class="tag t-det">Similaridade</span><span class="tag t-ag">Agente na divergência</span></span></div>
+      <div class="row"><span>Poderes de assinatura e representação</span><span class="tags"><span class="tag t-llm">LLM</span><span class="tag t-hu">Amostragem</span></span></div>
+      <div class="row"><span>Cadeia societária até o beneficiário final</span><span class="tags"><span class="tag t-ag">Agente</span></span></div>
+      <div class="row"><span>Listas de sanções e pessoas expostas politicamente</span><span class="tags"><span class="tag t-det">Match com limiar</span></span></div>
+      <div class="row"><span>Mídia negativa</span><span class="tags"><span class="tag t-ag">Agente</span><span class="tag t-hu">Humano</span></span></div>
+      <div class="row"><span>Indício de adulteração no documento</span><span class="tags"><span class="tag t-llm">Modelo especializado</span><span class="tag t-hu">Humano</span></span></div>
+      <div class="row"><span>Decisão final</span><span class="tags"><span class="tag t-det">Regra no baixo risco</span><span class="tag t-hu">Humano no alto risco</span></span></div>
+    </div>
+
+    <div class="docs">
+      <div class="box">
+        <span class="tag t-llm">OCR + mini LLM resolve</span>
+        <h3 style="margin-top:10px">Documentos padronizados</h3>
+        <p class="muted">Documento de identidade, cartão CNPJ, comprovante de endereço, certidões. Layout conhecido, poucos campos, alto volume. É onde o fator humano sai primeiro.</p>
+      </div>
+      <div class="box">
+        <span class="tag t-wf">LLM maior + cruzamento</span>
+        <h3 style="margin-top:10px">Documentos semiestruturados</h3>
+        <p class="muted">Contrato social e alterações, procuração, balanço. Texto longo, formato livre. A extração precisa ser conferida contra a Receita e contra os outros documentos do kit.</p>
+      </div>
+      <div class="box">
+        <span class="tag t-ag">Agente + humano</span>
+        <h3 style="margin-top:10px">Casos de julgamento</h3>
+        <p class="muted">Estrutura societária em camadas, notícia envolvendo um sócio, divergência sem explicação. O agente investiga e monta o dossiê. A pessoa decide.</p>
+      </div>
+    </div>
+
+    <div class="note"><b>Quase tudo, não tudo.</b> Dá para automatizar a grande maioria das validações. Casos de baixa confiança, alto risco de lavagem de dinheiro e divergências não resolvidas continuam com uma pessoa responsável, e uma amostra dos aprovados automaticamente deve ser revisada. Valide o desenho final com compliance e jurídico.</div>
+  </div>
+</section>
+
+<section id="como" class="pm">
+  <div class="wrap">
+    <span class="mono">06 / Para o PM</span>
+    <h2>Como defender, medir e fasear</h2>
+    <p class="intro">O ganho não é "ter IA". É reduzir tempo de aprovação e custo por kit sem aumentar o risco.</p>
+    <div class="grid2">
+      <div class="box">
+        <h3>Métricas que importam</h3>
+        <ul>
+          <li><b>Aprovação sem toque humano</b>Percentual de kits resolvidos de ponta a ponta sem analista.</li>
+          <li><b>Tempo de aprovação</b>Do envio do kit até a resposta ao cliente.</li>
+          <li><b>Erro por tipo</b>Aprovou o que não devia (grave) x barrou o que podia passar (atrito).</li>
+          <li><b>Custo por kit</b>Modelo, consultas externas e tempo de analista nas exceções.</li>
+          <li><b>Retrabalho do cliente</b>Quantas vezes o kit volta com pendência.</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3>Roteiro em 3 fases</h3>
+        <div class="phase">
+          <div><b>Fase 1: copiloto.</b> A IA classifica e extrai, o analista confere tudo. Você mede a taxa de acerto real.</div>
+          <div><b>Fase 2: automático no baixo risco.</b> Kits com alta confiança e sem alertas são aprovados por regra. O resto segue para a fila.</div>
+          <div><b>Fase 3: agente nas exceções.</b> O agente investiga divergências e entrega o dossiê pronto. O analista só decide.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="arquitetura" class="eng">
+  <div class="wrap">
+    <span class="mono">06 / Para a engenharia</span>
+    <h2>Contratos, travas e testes</h2>
+    <p class="intro">O LLM nunca escreve direto no CRM. Ele devolve dados com confiança, e um motor de regras decide o que fazer com eles.</p>
+    <div class="grid2">
+      <div class="box">
+        <h3>Checklist de arquitetura</h3>
+        <ul>
+          <li><b>Saída estruturada</b>JSON com schema validado. Resposta fora do schema é erro, não texto para interpretar.</li>
+          <li><b>Confiança por campo</b>Abaixo do limiar o campo vai para revisão, não para a regra.</li>
+          <li><b>Regras versionadas</b>Política fora do prompt, em código ou motor de regras, com histórico.</li>
+          <li><b>Conjunto de referência</b>Kits reais anonimizados com resposta conhecida. Todo prompt ou modelo novo roda contra ele antes de subir.</li>
+          <li><b>Limites do agente</b>Tools em lista fechada, teto de passos, de custo e de tempo.</li>
+          <li><b>Rastreabilidade</b>Documento, versão do prompt, modelo, saída e regra aplicada gravados por decisão.</li>
+          <li><b>Dados pessoais</b>Mascarar o que não é necessário, controlar retenção e acesso conforme a LGPD.</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3>O contrato entre LLM e regra</h3>
+<pre><span class="c">// saída da extração (LLM)</span>
+{
+  <span class="k">"tipo"</span>: "contrato_social",
+  <span class="k">"cnpj"</span>: { "valor": "00.000.000/0001-00", "conf": 0.98 },
+  <span class="k">"socios"</span>: [
+    { "nome": "Fulano de Tal", "doc": "000.000.000-00",
+      "participacao": 60, "conf": 0.91 }
+  ]
+}
+
+<span class="c">// decisão (código, sem LLM)</span>
+if (!cnpjValido(e.cnpj.valor))   return REPROVA
+if (menorConfianca(e) &lt; LIMIAR)  return REVISAO_HUMANA
+if (!bateComReceita(e.socios))   return AGENTE_INVESTIGA
+if (matchListaRestritiva(e))     return REVISAO_PLD
+return APROVA</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><b>ProAgentes.</b> Conteúdo educativo. Não substitui a avaliação de compliance, jurídico e segurança da sua empresa.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var btns = document.querySelectorAll('.toggle button');
+  function set(v){
+    document.body.dataset.view = v;
+    btns.forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.set === v)); });
+  }
+  btns.forEach(function(b){ b.addEventListener('click', function(){ set(b.dataset.set); }); });
+  var q = new URLSearchParams(location.search).get('visao');
+  if (q === 'eng' || q === 'pm') set(q);
+})();
+</script>
+</body>
+</html>
