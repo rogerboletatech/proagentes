@@ -126,6 +126,68 @@ pre{margin:14px 0 0;background:var(--ink);color:#e9e6dd;padding:18px;border-radi
 pre .k{color:#9fd8c0} pre .c{color:#8b9099}
 
 footer{padding:40px 0 60px;color:var(--muted);font-size:.9rem}
+
+/* simulacao */
+section.demo{background:var(--ink);color:#ece9e0;border-bottom:0}
+section.demo > .wrap > .mono{color:#a79df5}
+.demo .intro{color:#a9adb5}
+.sim{--d:#5fd3a8;--l:#f5b267;--a:#a79df5;--h:#f28aa6;border:1px solid #2c3036;border-radius:18px;background:#1b1e22;padding:18px;display:grid;gap:18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button,.replay{font:inherit;font-size:.85rem;font-weight:600;padding:8px 14px;border-radius:999px;border:1px solid #3a3f47;background:transparent;color:#ece9e0;cursor:pointer}
+.chips button[aria-pressed="true"]{background:#ece9e0;color:var(--ink);border-color:#ece9e0}
+.track{position:relative;height:34px;margin:4px 12px 0}
+.track .rail,.track .fill{position:absolute;left:0;top:16px;height:2px}
+.track .rail{right:0;background:#33383f}
+.track .fill{background:var(--d);width:0;transition:width .6s ease}
+.track .dot{position:absolute;top:10px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#1b1e22;border:2px solid #4a5059;transition:.3s}
+.track .dot.done{background:var(--d);border-color:var(--d)}
+.track .pk{position:absolute;top:3px;left:0;width:22px;height:28px;margin-left:-11px;border-radius:4px;background:#ece9e0;transition:left .6s ease;box-shadow:0 0 20px rgba(236,233,224,.55)}
+.track .pk::before{content:"";position:absolute;left:5px;right:5px;top:8px;height:2px;background:#15171a;box-shadow:0 5px 0 #15171a,0 10px 0 #15171a}
+.now{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.now b{font-family:"Fraunces",serif;font-size:1.45rem}
+.now span{color:#a9adb5}
+.stagegrid{display:grid;gap:14px}
+.dlist{display:grid;gap:6px;grid-template-columns:1fr 1fr;align-content:start}
+@media(min-width:760px){.stagegrid{grid-template-columns:230px 1fr}.dlist{grid-template-columns:1fr}}
+.dc{display:flex;align-items:center;gap:8px;font-size:.8rem;padding:8px 10px;border:1px solid #33383f;border-radius:8px;color:#a9adb5;transition:.3s}
+.dc i{width:10px;height:10px;border-radius:50%;background:#4a5059;flex:none}
+.dc.run{border-color:var(--l);color:#fff}
+.dc.run i{background:var(--l);animation:pulse .8s infinite}
+.dc.ok{border-color:#2f5a4b;color:#fff}
+.dc.ok i{background:var(--d)}
+@keyframes pulse{50%{transform:scale(1.7);opacity:.5}}
+.gbox{border:1px dashed #33383f;border-radius:12px;position:relative}
+.gbox svg{display:block;width:100%;height:auto;max-height:300px}
+.gbox .ph{position:absolute;inset:0;display:grid;place-items:center;color:#6b717a;font-size:.85rem;text-align:center;padding:10px;transition:opacity .4s}
+.gbox.live .ph{opacity:0}
+.gbox .n,.gbox .e{transition:opacity .5s}
+.gbox .hide{opacity:0}
+.gbox .n rect{fill:#23272c;stroke:#59606a;stroke-width:1.5;transition:.3s}
+.gbox .n text{fill:#ece9e0;font:600 9.5px "IBM Plex Sans",sans-serif;text-anchor:middle}
+.gbox .n text.sub{fill:#a9adb5;font:400 7px "IBM Plex Mono",monospace}
+.gbox .n.ok rect{stroke:var(--d)}
+.gbox .n.warn rect{stroke:var(--l)}
+.gbox .n.run rect{stroke:var(--a);stroke-width:2.5;animation:glow 1s infinite}
+.gbox .n.alert rect{stroke:var(--h);fill:#3a1a25;stroke-width:2.5}
+@keyframes glow{50%{stroke-opacity:.25}}
+.gbox .e line{stroke:#59606a;stroke-width:1.5}
+.gbox .e text{fill:#ece9e0;font:500 8px "IBM Plex Mono",monospace;text-anchor:middle}
+.counts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.counts div{border:1px solid #33383f;border-radius:10px;padding:8px 10px}
+.counts b{display:block;font-family:"Fraunces",serif;font-size:1.5rem;line-height:1.1}
+.counts span{font-family:"IBM Plex Mono",monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;color:#a9adb5}
+.k-det{color:var(--d)}.k-llm{color:var(--l)}.k-ag{color:var(--a)}.k-hu{color:var(--h)}
+.log{font-family:"IBM Plex Mono",monospace;font-size:.74rem;line-height:1.5;background:#121416;border-radius:10px;padding:12px;height:200px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
+.log div{animation:lin .3s ease;padding:1px 0}
+.log .tg{display:inline-block;min-width:58px;font-weight:500}
+@keyframes lin{from{opacity:0;transform:translateY(6px)}}
+.verdict{border-radius:12px;padding:16px 18px;border:1.5px solid #33383f;color:#a9adb5;transition:.4s}
+.verdict b{display:block;font-family:"Fraunces",serif;font-size:1.35rem;color:#fff}
+.verdict.ok{border-color:var(--d);background:rgba(95,211,168,.1)}
+.verdict.ag{border-color:var(--a);background:rgba(167,157,245,.1)}
+.verdict.hu{border-color:var(--h);background:rgba(242,138,166,.1)}
+.simfoot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;color:#6b717a;font-size:.8rem}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body data-view="pm">
@@ -150,11 +212,56 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:.9rem}
     <p class="persona pm">Visão PM: onde investir, que risco aceitar, como medir o resultado e o que prometer para o negócio.</p>
     <p class="persona eng">Visão Engenharia: qual arquitetura usar, quais contratos definir, como testar e onde colocar as travas.</p>
     <div class="cta">
-      <a class="btn solid" href="#niveis">Ver os níveis</a>
-      <a class="btn" href="#caso">Caso: kit de documentação</a>
+      <a class="btn solid" href="#demo">Ver a esteira rodando</a>
+      <a class="btn" href="#niveis">Ver os níveis</a>
     </div>
   </div>
 </div>
+
+<section id="demo" class="demo">
+  <div class="wrap">
+    <span class="mono">Simulação</span>
+    <h2>Um kit atravessando a esteira</h2>
+    <p class="intro">Escolha um cenário e acompanhe cada etapa. Repare em quem trabalha: quase tudo é regra, o LLM lê, e o agente só aparece quando o caminho deixa de ser previsível.</p>
+
+    <div class="sim" id="sim">
+      <div class="chips" role="group" aria-label="Cenário">
+        <button type="button" data-sc="limpo" aria-pressed="true">Kit limpo</button>
+        <button type="button" data-sc="diverg" aria-pressed="false">Divergência de sócio</button>
+        <button type="button" data-sc="pld" aria-pressed="false">Alerta de PLD</button>
+      </div>
+
+      <div>
+        <div class="track" id="track"><div class="rail"></div><div class="fill"></div><div class="pk"></div></div>
+        <div class="now"><b id="nowName">Recebimento</b><span class="mono" id="nowIdx">1 / 7</span></div>
+      </div>
+
+      <div class="stagegrid">
+        <div class="dlist" id="dlist"></div>
+        <div class="gbox" id="gbox">
+          <div class="ph">O grafo societário se monta aqui</div>
+          <svg id="graph" viewBox="0 0 330 200" role="img" aria-label="Grafo societário da empresa analisada"></svg>
+        </div>
+      </div>
+
+      <div class="counts">
+        <div><b class="k-det" id="c-det">0</b><span>Regra</span></div>
+        <div><b class="k-llm" id="c-llm">0</b><span>LLM</span></div>
+        <div><b class="k-ag" id="c-ag">0</b><span>Agente</span></div>
+        <div><b class="k-hu" id="c-hu">0</b><span>Humano</span></div>
+      </div>
+
+      <div class="log" id="log" aria-hidden="true"></div>
+
+      <div class="verdict" id="verdict"><b>Aguardando decisão</b><span>O resultado aparece ao fim da esteira.</span></div>
+
+      <div class="simfoot">
+        <span>Simulação ilustrativa com dados fictícios.</span>
+        <button type="button" class="replay" id="replay">Rodar de novo</button>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section id="niveis">
   <div class="wrap">
@@ -488,6 +595,173 @@ return APROVA</pre>
   btns.forEach(function(b){ b.addEventListener('click', function(){ set(b.dataset.set); }); });
   var q = new URLSearchParams(location.search).get('visao');
   if (q === 'eng' || q === 'pm') set(q);
+})();
+
+/* simulacao da esteira */
+(function(){
+  var root = document.getElementById('sim'); if (!root) return;
+  var NS = 'http://www.w3.org/2000/svg';
+  var ST = ['Recebimento','Classificação','Extração','Regras','Receita','Sócios e PLD','Decisão'];
+  var DOCS = [['contrato_social.pdf','Contrato social'],['cartao_cnpj.pdf','Cartão CNPJ'],['identidade_socios.jpg','Identidade dos sócios'],['comprovante.pdf','Comprov. de endereço'],['procuracao.pdf','Procuração']];
+  var TAG = {det:'REGRA',llm:'LLM',ag:'AGENTE',hu:'HUMANO'};
+  var NODES = {
+    E:['Empresa Exemplo','cliente',160,26], A:['Ana Souza','pessoa física',70,100],
+    C1:['Carlos Lima','pessoa física',234,100], H:['Holding Alfa','pessoa jurídica',234,100],
+    C:['Carlos Lima','pessoa física',172,174], M:['Marina Reis','pessoa física',280,174]
+  };
+  var EDGES = {A:['E','60%'], C1:['E','40%'], H:['E','40%'], C:['H','70%'], M:['H','30%']};
+  var DELAY = {s:550, l:650, d:140, g:550, n:250, v:0};
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  var track = document.getElementById('track'), fill = track.querySelector('.fill'), pk = track.querySelector('.pk');
+  var dlist = document.getElementById('dlist'), svg = document.getElementById('graph'), gbox = document.getElementById('gbox');
+  var log = document.getElementById('log'), verdict = document.getElementById('verdict');
+  var dots = [], dcs = [], counts = {}, runId = 0, current = 'limpo';
+
+  ST.forEach(function(_, i){
+    var d = document.createElement('div'); d.className = 'dot'; d.style.left = (i / 6 * 100) + '%';
+    track.insertBefore(d, pk); dots.push(d);
+  });
+  DOCS.forEach(function(doc){
+    var d = document.createElement('div'); d.className = 'dc';
+    d.appendChild(document.createElement('i')); d.appendChild(document.createTextNode(doc[1]));
+    dlist.appendChild(d); dcs.push(d);
+  });
+  function el(name, attrs, text){
+    var e = document.createElementNS(NS, name);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text) e.textContent = text;
+    return e;
+  }
+  Object.keys(EDGES).forEach(function(id){
+    var p = NODES[EDGES[id][0]], c = NODES[id];
+    var g = el('g', {'class':'e hide', id:'e-' + id});
+    g.appendChild(el('line', {x1:p[2], y1:p[3] + 17, x2:c[2], y2:c[3] - 17}));
+    var left = c[2] < p[2];
+    g.appendChild(el('text', {x:(p[2] + c[2]) / 2 + (left ? -16 : 16), y:(p[3] + c[3]) / 2 + 3}, EDGES[id][1]));
+    svg.appendChild(g);
+  });
+  Object.keys(NODES).forEach(function(id){
+    var n = NODES[id];
+    var g = el('g', {'class':'n hide', id:'n-' + id, transform:'translate(' + n[2] + ',' + n[3] + ')'});
+    g.appendChild(el('rect', {x:-46, y:-17, width:92, height:34, rx:8}));
+    g.appendChild(el('text', {y:-1}, n[0]));
+    g.appendChild(el('text', {y:10, 'class':'sub'}, n[1]));
+    svg.appendChild(g);
+  });
+
+  function prefix(){
+    var ev = [['s',0], ['l','det','Kit recebido: 5 arquivos'], ['l','det','Completude: 5 de 5 documentos exigidos'], ['s',1]];
+    DOCS.forEach(function(d, i){ ev.push(['d',i,'run']); ev.push(['l','llm', d[0] + ' → ' + d[1] + ' (conf 0.9' + (8 - i) + ')']); });
+    ev.push(['s',2], ['l','llm','42 campos extraídos, menor confiança 0.91']);
+    DOCS.forEach(function(_, i){ ev.push(['d',i,'ok']); });
+    ev.push(['l','det','Schema JSON válido em 5 de 5'],
+      ['s',3], ['l','det','CNPJ e CPFs: dígito verificador ok'], ['l','det','Documentos dentro da validade'], ['l','det','Confiança acima do limiar 0.85'],
+      ['s',4], ['g','E'], ['l','det','Receita: situação cadastral ATIVA'], ['l','det','CNAE permitido pela política'], ['l','det','Quadro societário obtido: 2 registros'], ['n','E','ok'], ['s',5]);
+    return ev;
+  }
+  var SC = {
+    limpo: [
+      ['g','A'], ['g','C1'],
+      ['l','det','Contrato x Receita: 2 de 2 sócios conferem'], ['n','A','ok'], ['n','C1','ok'],
+      ['l','det','Listas de sanções e PEP: sem match'],
+      ['s',6], ['l','det','Risco baixo, nenhum alerta'],
+      ['v','ok','Aprovado automaticamente','Nenhum analista tocou neste kit. O agente nem foi chamado.']
+    ],
+    diverg: [
+      ['g','A'], ['n','A','ok'], ['g','H'], ['n','H','warn'],
+      ['l','det','Divergência: contrato cita Carlos Lima, Receita cita Holding Alfa'],
+      ['l','ag','Agente acionado: investigar divergência'], ['n','H','run'],
+      ['l','ag','tool consultar_cnpj(Holding Alfa) → 2 sócios'], ['g','C'], ['g','M'],
+      ['l','ag','tool buscar_no_kit("alteração contratual") → 3ª alteração'],
+      ['l','ag','Achado: Carlos transferiu as cotas para a Holding Alfa'], ['n','H','ok'],
+      ['l','det','Participação efetiva: Carlos 40% × 70% = 28%'], ['n','C','ok'],
+      ['l','det','Participação efetiva: Marina 40% × 30% = 12%'], ['n','M','ok'],
+      ['l','det','Listas de sanções e PEP: sem match'],
+      ['s',6], ['l','det','Divergência explicada com evidência'],
+      ['v','ag','Aprovado após investigação do agente','Dossiê com as evidências anexado ao CRM. Nenhum analista acionado.']
+    ],
+    pld: [
+      ['g','A'], ['n','A','ok'], ['g','H'],
+      ['l','det','Sócio pessoa jurídica identificado: Holding Alfa'],
+      ['l','ag','Agente acionado: abrir cadeia societária'], ['n','H','run'],
+      ['l','ag','tool consultar_cnpj(Holding Alfa) → 2 sócios'], ['g','C'], ['g','M'], ['n','H','ok'],
+      ['l','det','Participação efetiva: Carlos 28%, Marina 12%'], ['n','C','ok'],
+      ['l','det','Lista PEP: match Marina Reis, similaridade 0.94'], ['n','M','alert'],
+      ['l','ag','tool buscar_midia(Marina Reis) → 2 notícias relevantes'],
+      ['l','ag','Dossiê montado com 4 evidências'],
+      ['s',6], ['l','det','Política: PEP na cadeia exige revisão'],
+      ['l','hu','Caso enviado para a fila de PLD'],
+      ['v','hu','Revisão humana: PLD','O analista recebe o dossiê pronto e só decide.']
+    ]
+  };
+
+  function setStage(i){
+    var pct = (i / 6 * 100) + '%';
+    fill.style.width = pct; pk.style.left = pct;
+    dots.forEach(function(d, k){ d.className = 'dot' + (k <= i ? ' done' : ''); });
+    document.getElementById('nowName').textContent = ST[i];
+    document.getElementById('nowIdx').textContent = (i + 1) + ' / 7';
+  }
+  function reset(){
+    setStage(0);
+    dcs.forEach(function(d){ d.className = 'dc'; });
+    svg.querySelectorAll('.n').forEach(function(n){ n.setAttribute('class','n hide'); });
+    svg.querySelectorAll('.e').forEach(function(e){ e.setAttribute('class','e hide'); });
+    gbox.classList.remove('live');
+    log.textContent = '';
+    ['det','llm','ag','hu'].forEach(function(k){ counts[k] = 0; document.getElementById('c-' + k).textContent = '0'; });
+    verdict.className = 'verdict';
+    verdict.firstChild.textContent = 'Aguardando decisão';
+    verdict.lastChild.textContent = 'O resultado aparece ao fim da esteira.';
+  }
+  function apply(ev){
+    var t = ev[0];
+    if (t === 's') setStage(ev[1]);
+    else if (t === 'd') dcs[ev[1]].className = 'dc ' + ev[2];
+    else if (t === 'g') {
+      gbox.classList.add('live');
+      document.getElementById('n-' + ev[1]).classList.remove('hide');
+      var e = document.getElementById('e-' + ev[1]); if (e) e.classList.remove('hide');
+    }
+    else if (t === 'n') document.getElementById('n-' + ev[1]).setAttribute('class','n ' + ev[2]);
+    else if (t === 'l') {
+      var row = document.createElement('div'), tg = document.createElement('span');
+      tg.className = 'tg k-' + ev[1]; tg.textContent = TAG[ev[1]];
+      row.appendChild(tg); row.appendChild(document.createTextNode(ev[2]));
+      log.appendChild(row);
+      while (log.children.length > 14) log.removeChild(log.firstChild);
+      counts[ev[1]]++; document.getElementById('c-' + ev[1]).textContent = counts[ev[1]];
+    }
+    else if (t === 'v') {
+      verdict.className = 'verdict ' + ev[1];
+      verdict.firstChild.textContent = ev[2];
+      verdict.lastChild.textContent = ev[3];
+    }
+  }
+  function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+  async function run(key){
+    var id = ++runId; current = key;
+    root.querySelectorAll('.chips button').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.sc === key)); });
+    reset();
+    var evs = prefix().concat(SC[key]);
+    if (!reduce) await sleep(500);
+    for (var i = 0; i < evs.length; i++) {
+      if (id !== runId) return;
+      apply(evs[i]);
+      if (!reduce) await sleep(DELAY[evs[i][0]]);
+    }
+  }
+  root.querySelectorAll('.chips button').forEach(function(b){ b.addEventListener('click', function(){ run(b.dataset.sc); }); });
+  document.getElementById('replay').addEventListener('click', function(){ run(current); });
+
+  reset();
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(en){
+      if (en[0].isIntersecting) { io.disconnect(); run('limpo'); }
+    }, {threshold:.25});
+    io.observe(root);
+  } else run('limpo');
 })();
 </script>
 </body>
