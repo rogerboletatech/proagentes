@@ -294,6 +294,7 @@ body.switched .pm,body.switched .eng{animation:flash 1.6s ease}
     </div>
   </div>
   <nav class="wrap snav" id="snav" aria-label="Seções">
+    <a href="#resumo">Resumo</a>
     <a href="#demo">Simulação</a>
     <a href="#niveis">Níveis</a>
     <a href="#workflow-x-agente">Workflow x agente</a>
@@ -317,7 +318,8 @@ body.switched .pm,body.switched .eng{animation:flash 1.6s ease}
     <p class="persona pm">Lendo como PM: onde investir, que risco aceitar, como medir o resultado e o que prometer para o negócio.</p>
     <p class="persona eng">Lendo como engenharia: qual arquitetura usar, quais contratos definir, como testar e onde colocar as travas.</p>
     <div class="cta">
-      <a class="btn solid" href="#demo">Ver a esteira rodando</a>
+      <a class="btn solid" href="#resumo">Ler o resumo em 1 minuto</a>
+      <a class="btn" href="#demo">Ver a esteira rodando</a>
       <a class="btn" href="#quando">Fazer o teste rápido</a>
     </div>
    </div>
@@ -330,6 +332,46 @@ body.switched .pm,body.switched .eng{animation:flash 1.6s ease}
    </a>
   </div>
 </div>
+
+<section id="resumo">
+  <div class="wrap">
+    <span class="mono">Resumo em 1 minuto</span>
+    <h2>Quando usar agente, em uma frase</h2>
+    <p class="principle"><span class="b">Se dá para desenhar o caminho, é workflow.</span> <span class="a">Se o caminho muda a cada caso, é agente.</span></p>
+
+    <h3 style="margin-bottom:14px">Faça 4 perguntas, nesta ordem</h3>
+    <p class="intro">Pare na primeira que resolver. Cada degrau acima custa mais e é menos previsível.</p>
+    <ol class="pipe">
+      <li><b>Uma regra resolve?</b><span class="d">Use código. Exemplo: documento vencido, CNPJ inválido, kit incompleto.</span><br><span class="tag t-det">Regra</span></li>
+      <li><b>Precisa ler texto, imagem ou PDF?</b><span class="d">Use uma chamada de modelo só para ler. Exemplo: extrair os sócios de um contrato social.</span><br><span class="tag t-llm">LLM</span></li>
+      <li><b>Os passos são sempre os mesmos?</b><span class="d">Use um workflow. Exemplo: conferir, ler, validar, cruzar e encaminhar cada documento.</span><br><span class="tag t-wf">Workflow</span></li>
+      <li><b>O próximo passo depende do que aparecer?</b><span class="d">Aqui entra o agente. Exemplo: investigar por que os sócios do contrato não batem com o registro oficial.</span><br><span class="tag t-ag">Agente</span></li>
+    </ol>
+
+    <h3 style="margin-bottom:14px">Em que momento colocar o agente</h3>
+    <div class="compare">
+      <div class="box yes">
+        <h3>Chegou a hora quando</h3>
+        <ul class="check">
+          <li>O workflow já roda e você mede a taxa de acerto.</li>
+          <li>A fila de exceção virou o gargalo do time.</li>
+          <li>As exceções não seguem um padrão que caiba em regra.</li>
+          <li>O erro pode ser desfeito e uma pessoa aprova o resultado.</li>
+        </ul>
+      </div>
+      <div class="box no">
+        <h3>Ainda é cedo quando</h3>
+        <ul class="check">
+          <li>O processo básico ainda é manual.</li>
+          <li>Ninguém sabe dizer quanto a automação atual acerta.</li>
+          <li>A maioria das exceções se repete e viraria regra.</li>
+          <li>O erro é irreversível ou tem impacto regulatório direto.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="rule">O agente é o último a entrar. Primeiro a regra, depois o modelo lendo, depois o workflow. O agente fica com o que sobrou sem caminho definido.</div>
+  </div>
+</section>
 
 <section id="demo" class="demo">
   <div class="wrap">
